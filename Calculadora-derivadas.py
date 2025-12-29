@@ -79,20 +79,20 @@ while True:
     match (operacao):
         case 1: # POTENCIAÇÃO
             print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
-            equacao = input("- Digite a função a ser derivada: ")
+            equacao = input("{} - Digite a função a ser derivada: {}".format(estilo_negrito, estilo_normal))
             pot = f"{estilo_negrito}{potencia(equacao)}{estilo_normal}"
 
-            print("{} • A resposta é: {}{}".format(estilo_sublinhado, pot, estilo_normal))
+            print(" •{} A resposta é: {}{}".format(estilo_sublinhado, pot, estilo_normal))
 
         case 2: # SOMA | SUBTRAÇÃO
             print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
 
-            sinal = str(input("Escolha a operação [+/-]: "))
-            num1 = input("Digite o 1º valor: ")
-            num2 = input("Digite o 2º valor: ")
+            sinal = str(input("{} - Escolha a operação [+/-]: {}".format(estilo_negrito, estilo_normal)))
+            num1 = input("{} - Digite o 1º valor: {}".format(estilo_negrito, estilo_normal))
+            num2 = input("{} - Digite o 2º valor: {}".format(estilo_negrito, estilo_normal))
             resp = soma_sub(sinal, num1, num2)
 
-            print("{} • A resposta é: {}{}".format(estilo_sublinhado, resp, estilo_normal))
+            print(" •{} A resposta é: {}{}".format(estilo_sublinhado, resp, estilo_normal))
 
         # case 3: # MULTIPLICAÇÃO
         #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
@@ -108,13 +108,13 @@ while True:
 
         case _: # ENTRADA INVÁLIDA
             os.system('cls')
-            print("\n {} - Número inválido. Tente novamente {} \n".format(estilo_invertido, estilo_normal))
+            print("\n {}***Número inválido. Tente novamente {} \n".format(estilo_invertido, estilo_normal))
             continue
 
 # Área de verificação de continuidade =================================================================    
     
     # Verifica se o usuário quer continuar
-    continuar = input("\n -{} Deseja continuar [S/N]? {}". format(estilo_negrito, estilo_normal)).upper()[0]
+    continuar = input("\n ->{} Deseja continuar [S/N]? {}". format(estilo_negrito, estilo_normal)).upper()[0]
 
     if (continuar == "S"):
         os.system('cls')
@@ -128,5 +128,5 @@ while True:
         break
     else: 
         os.system('cls')
-        print("\n {}- Tentativa inválida. Tente novamente {}\n".format(estilo_invertido, estilo_normal))
+        print("\n {}***Tentativa inválida. Tente novamente {}\n".format(estilo_invertido, estilo_normal))
         continue 
