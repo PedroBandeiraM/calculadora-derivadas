@@ -2,7 +2,6 @@
 
 # TESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
-
 import os, time # OS -> Requisições de sistema ("clean") ; TIME -> Funções de tempo ("sleep")
 
 # Declaração/atribuição de variáveis
