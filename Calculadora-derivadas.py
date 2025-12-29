@@ -37,9 +37,9 @@ def potencia(equacao):
     if (expoente == 0):
         return multiplicando
     elif (expoente == 1):
-        return str("{}.x".format(multiplicando))
+        return str("{}x".format(multiplicando))
     else:
-        return str("{}.x^{}".format(multiplicando, expoente))
+        return str("{}x^{}".format(multiplicando, expoente))
 
 def soma_sub(sinal, num1, num2): 
     resp = []
@@ -48,9 +48,45 @@ def soma_sub(sinal, num1, num2):
 
     return str(f"{resp[0]} {sinal} {resp[-1]}")
 
-# def multiplicacao(valor1, tipo1, valor2, tipo2):
-#     num1 =
-    
+def multiplicacao(num1, num2):
+    nums = {}
+    resp = [potencia(num1), num2, num1, potencia(num2)]
+
+    # SEPARADOR
+    for item in range(len(resp)):
+        num = str(resp[item])
+        resp_final = {}
+        cont = 0
+
+        if ("x" in num):
+            posicao_x = num.index("x")
+            try:
+                multiplicando = int(num[:posicao_x])
+            except:
+                multiplicando = 1
+            try:
+                expoente = int(num[(posicao_x + 2):])
+            except:
+                expoente = 1
+        else:
+            multiplicando = int(num)
+            expoente = 0    
+        
+        nums[f"num[{item}]"] = (multiplicando, expoente)
+
+    for i in range(0, 4, 2):
+        multiplicando = (nums[f"num[{i}]"][0]) * (nums[f"num[{i+1}]"][0])
+        expoente = (nums[f"num[{i}]"][1]) + (nums[f"num[{i+1}]"][1])
+        resp_final[f"num[{cont}]"] = (multiplicando, expoente)
+        cont += 1
+
+    if (resp_final["num[0]"][1] == resp_final["num[1]"][1]):
+        multiplicando = (resp_final["num[0]"][0]) + (resp_final["num[1]"][0])
+        expoente = (resp_final["num[0]"][1])
+        return [multiplicando, expoente]
+    else:
+        return (resp_final)
+
 # def quociente():
 #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
     
@@ -90,15 +126,23 @@ while True:
             sinal = str(input("{} - Escolha a operação [+/-]: {}".format(estilo_negrito, estilo_normal)))
             num1 = input("{} - Digite o 1º valor: {}".format(estilo_negrito, estilo_normal))
             num2 = input("{} - Digite o 2º valor: {}".format(estilo_negrito, estilo_normal))
-            resp = soma_sub(sinal, num1, num2)
+            som_sub = soma_sub(sinal, num1, num2)
 
-            print(" •{} A resposta é: {}{}".format(estilo_sublinhado, resp, estilo_normal))
+            print(" •{} A resposta é: {}{}".format(estilo_sublinhado, som_sub, estilo_normal))
 
-        # case 3: # MULTIPLICAÇÃO
-        #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
+        case 3: # MULTIPLICAÇÃO
+            print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
 
-        #     num1 = input("Digite o 1º número: ")
-        #     num2 = input("Digite um número")
+            num1 = input("{} - Digite o 1º número: {}".format(estilo_negrito, estilo_normal))
+            num2 = input("{} - Digite o 2º número: {}".format(estilo_negrito, estilo_normal))
+            mult = multiplicacao(num1, num2)
+
+            if (isinstance(mult, list)):
+                mult = f"{mult[0]}x^{mult[-1]}"
+            elif (isinstance(mult, dict)):
+                mult = f"{mult["num[0]"][0]}x^{mult["num[0]"][1]} . {mult["num[1]"][0]}x^{mult["num[1]"][1]}"
+
+            print(" •{} A resposta é: {}{}".format(estilo_sublinhado, mult, estilo_normal))
 
         # case 4: # QUOCIENTE
         #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
