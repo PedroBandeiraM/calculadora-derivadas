@@ -1,4 +1,4 @@
-# Calculadora de derivadas: Abre um menu de operações (1 à 5) relacionadas à derivação de funções matemáticas
+# Calculadora de derivadas: Abre um menu de operações (1 à 5) relacionadas à derivação de funções matemáticas.
 
 import os, time # OS -> Requisições de sistema ("clean") ; TIME -> Funções de tempo ("sleep")
 
