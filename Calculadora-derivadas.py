@@ -1,6 +1,4 @@
-# Calculadora de derivadas: Abre um menu de operações (1 à 5) e tem como entrada os números que serão operados
-
-# TESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+# Calculadora de derivadas: Abre um menu de operações (1 à 5) relacionadas à derivação de funções matemáticas
 
 import os, time # OS -> Requisições de sistema ("clean") ; TIME -> Funções de tempo ("sleep")
 
@@ -11,21 +9,25 @@ estilo_negrito = "\033[1m"
 estilo_sublinhado = "\033[4m"
 estilo_invertido = "\033[7m"
 
-# Área de funções ==============================================================================================================
+# Área de funções =========================================================================================
 
 def potencia(equacao):    
     equacao = str(equacao)
     try:
-        resp = list(map(int, equacao.split("x^")))
-        multiplicando = resp[0]
-        expoente = resp[-1]
+        if ("x" in equacao):
+            resp = list(map(int, equacao.split("x^")))
+            multiplicando = resp[0]
+            expoente = resp[-1]
+        else:
+            return 0
     except:
+        posicao_x = equacao.index("x")
         try:
-            multiplicando = int(equacao[0])
+            multiplicando = int(equacao[:posicao_x])
         except:
             multiplicando = 1
         try:
-            expoente = int(equacao[-1])
+            expoente = int(equacao[(posicao_x + 2):])
         except:
             expoente = 1
 
@@ -39,11 +41,12 @@ def potencia(equacao):
     else:
         return str("{}.x^{}".format(multiplicando, expoente))
 
-def soma_sub(num1, num2): 
+def soma_sub(sinal, num1, num2): 
+    resp = []
     resp.append(potencia(num1))
     resp.append(potencia(num2))
 
-    return resp
+    return str(f"{resp[0]} {sinal} {resp[-1]}")
 
 # def multiplicacao(valor1, tipo1, valor2, tipo2):
 #     num1 =
@@ -54,20 +57,23 @@ def soma_sub(num1, num2):
 # def cadeia():
 #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
 
-# Área de execução =============================================================================================================
+# Área de execução ========================================================================================
 
 while True:
     print(f"\n{"{} Calculadora de derivadas {}":=^60}".format(estilo_negrito, estilo_normal)) # Título
 
     # Opções de operações (1 à 5)
-    operacao = int(input('''
-- Escolha a operação que deseja calcular:                      
-    {}[1]{} Potenciação (^)
-    {}[2]{} Soma / subtração (+ | -)
-    {}[3]{} Multiplicação (*)
-    {}[4]{} Quociente (/)
-    {}[5]{} Cadeia (composição)
-    -> '''.format(estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal)))
+    try:
+        operacao = int(input('''
+    - Escolha a operação que deseja calcular:                      
+        {}[1]{} Potenciação (^)
+        {}[2]{} Soma / subtração (+ | -)
+        {}[3]{} Multiplicação (*)
+        {}[4]{} Quociente (/)
+        {}[5]{} Cadeia (composição)
+        -> '''.format(estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal, estilo_negrito, estilo_normal)))
+    except:
+        operacao = 0 # Caso seja digitado algo que não seja possível converter para número
 
     # Verifica se a opção escolhida é válida, direcionando se sim, e, senão, retornando erro
     match (operacao):
@@ -81,11 +87,12 @@ while True:
         case 2: # SOMA | SUBTRAÇÃO
             print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
 
+            sinal = str(input("Escolha a operação [+/-]: "))
             num1 = input("Digite o 1º valor: ")
             num2 = input("Digite o 2º valor: ")
-            resp = soma_sub(num1, num2)
+            resp = soma_sub(sinal, num1, num2)
 
-            print("{} • A resposta é: {}{}".format(estilo_sublinhado, f"{resp[0]} + {resp[1]}", estilo_normal))
+            print("{} • A resposta é: {}{}".format(estilo_sublinhado, resp, estilo_normal))
 
         # case 3: # MULTIPLICAÇÃO
         #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
@@ -104,9 +111,9 @@ while True:
             print("\n {} - Número inválido. Tente novamente {} \n".format(estilo_invertido, estilo_normal))
             continue
 
-# Área de verificação de continuidade =====================================================================================    
+# Área de verificação de continuidade =================================================================    
     
-    # Questiona e verifica se o usuário quer continuar
+    # Verifica se o usuário quer continuar
     continuar = input("\n -{} Deseja continuar [S/N]? {}". format(estilo_negrito, estilo_normal)).upper()[0]
 
     if (continuar == "S"):
