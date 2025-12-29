@@ -1,5 +1,8 @@
 # Calculadora de derivadas: Abre um menu de operações (1 à 5) e tem como entrada os números que serão operados
 
+# TESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+
 import os, time # OS -> Requisições de sistema ("clean") ; TIME -> Funções de tempo ("sleep")
 
 # Declaração/atribuição de variáveis
