@@ -33,11 +33,11 @@ def potencia(equacao):
         except:
             expoente = 1
 
-    #Processo de derivação sobre a regra da potência
+    # Processo de derivação sobre a regra da potência
     multiplicando = multiplicando*expoente
     expoente -= 1
 
-    #Simplifica a visualização dos resultados (não altera os valores matemáticos)
+    # Simplifica a visualização dos resultados (não altera os valores matemáticos)
     if (expoente == 0):
         return multiplicando
     elif (expoente == 1):
@@ -46,7 +46,7 @@ def potencia(equacao):
         return str("{}x^{}".format(multiplicando, expoente))
 
 def soma_sub(sinal, num1, num2): 
-    resp = [] #Lista que armazena os monômios derivados
+    resp = [] # Lista que armazena os monômios derivados
     resp.append(potencia(num1))
     resp.append(potencia(num2))
 
@@ -93,49 +93,76 @@ def multiplicacao(num1, num2):
     else:
         return (resp_final)
 
-# def quociente(num1, num2):
-#     nums = [potencia(num1), num2, num1, potencia(num2), num2] # Lista que organiza a ordem dos monômios e o que é derivado 
-#     resp = {} # Dicionário que guarda os elementos de cada monômio separado para os cálculos
-#     numerador = {} # Armazena o resultado final
+def quociente(num1, num2):
+    nums = [potencia(num1), num2, num1, potencia(num2), num2] # Lista que organiza a ordem dos monômios e o que é derivado 
+    nums_sep = {} # Dicionário que guarda os elementos de cada monômio separado para os cálculos
+    numerador = {} # Armazena o resultado do numerador
 
-#     # Separa os coeficientes (números que multiplicam as variáveis) e os expoentes da incógnita
-#     for item in range(len(nums)):
-#         num = str(nums[item]) # Monômio (1 por vez)
-#         cont = 0
+    # Separa os coeficientes (números que multiplicam as variáveis) e os expoentes da incógnita
+    for item in range(len(nums)):
+        num = str(nums[item]) # Monômio (1 por vez)
+        cont = 0
 
-#         if ("x" in num):
-#             posicao_x = num.index("x")
-#             try:
-#                 multiplicando = int(num[:posicao_x])
-#             except:
-#                 multiplicando = 1
-#             try:
-#                 expoente = int(num[(posicao_x + 2):])
-#             except:
-#                 expoente = 1
-#         else:
-#             multiplicando = int(num)
-#             expoente = 0    
+        if ("x" in num):
+            posicao_x = num.index("x")
+            try:
+                multiplicando = int(num[:posicao_x])
+            except:
+                multiplicando = 1
+            try:
+                expoente = int(num[(posicao_x + 2):])
+            except:
+                expoente = 1
+        else:
+            multiplicando = int(num)
+            expoente = 0    
         
-#         resp[f"num[{item}]"] = (multiplicando, expoente) # Adiciona os elementos separados em lista dentro do dicionário 
-        
-#     for i in range(0, 4, 2):
-#         multiplicando = (resp[f"num[{i}]"][0]) * (resp[f"num[{i+1}]"][0])
-#         expoente = (resp[f"num[{i}]"][1]) + (resp[f"num[{i+1}]"][1])
-#         numerador[f"num[{cont}]"] = (multiplicando, expoente)
-#         cont += 1
+        nums_sep[f"num[{item}]"] = (multiplicando, expoente) # Adiciona os elementos separados em lista dentro do dicionário 
+   
+    # Realiza a multiplicação entre os monômios (multiplicando os coeficientes - números - e somando os expoentes)
+    for i in range(0, 4, 2):
+        multiplicando = (nums_sep[f"num[{i}]"][0]) * (nums_sep[f"num[{i+1}]"][0])
+        expoente = (nums_sep[f"num[{i}]"][1]) + (nums_sep[f"num[{i+1}]"][1])
+        if (multiplicando == 0):
+            expoente = 0
+        numerador[f"num[{cont}]"] = (multiplicando, expoente)
+        cont += 1
 
-#     #Verifica se é possível subtrair os monômios, retornando 2 possíveis casos (com subtração e sem)
-#     if (numerador["num[0]"][1] == numerador["num[1]"][1]):
-#         multiplicando = (numerador["num[0]"][0]) - (numerador["num[1]"][0])
-#         expoente = (numerador["num[0]"][1])
-#         resp_numerador = [multiplicando, expoente]
-#     else:
-#         resp_numerador = (numerador)
+    # Verifica se é possível subtrair os monômios no numerador, retornando 2 possíveis casos (com subtração e sem)
+    if (numerador["num[0]"][1] == numerador["num[1]"][1]):
+        multiplicando = (numerador["num[0]"][0]) - (numerador["num[1]"][0])
+        expoente = (numerador["num[0]"][1])
+        resp_numerador = [multiplicando, expoente, "COM SUB"]
+    else:
+        resp_numerador = (numerador, "SEM SUB")
+    
+    # Calcula o denominador
+    if (nums_sep['num[4]'][1] == 0):
+        denominador = (pow(nums_sep['num[4]'][0], 2))
+    else:
+        denominador = (pow(nums_sep['num[4]'][0], 2), (nums_sep['num[4]'][1] * 2))
 
-#     denominador = (resp['num[4]'][0], resp['num[4]'][1] * 2)
+    # Ideia: Fazer a simplificação do quociente, subtraindo expoentes e dividindo coeficientes
+    # if ("COM SUB" in resp_numerador) and (denominador[0] != 0):
+    #     resp_numerador[1] = resp_numerador[1] - denominador[1]
+    #     denominador[1] = 0
 
-#     return (resp_numerador, denominador)
+    # Simplifica a visualização do resultado: Numerador
+    if ("COM SUB" in resp_numerador):
+        if (resp_numerador[1] != 0):
+            resp_numerador = f"{resp_numerador[0]}x^{resp_numerador[1]}"
+        else:
+            resp_numerador = f"{resp_numerador[0]}"
+    elif ("SEM SUB" in resp_numerador):
+        resp_numerador = f"({resp_numerador[0]["num[0]"][0]}x^{resp_numerador[0]["num[0]"][1]}) - ({resp_numerador[0]["num[1]"][0]}x^{resp_numerador[0]["num[1]"][1]})"
+
+    # Simplifica a visualização do resultado: Denominador
+    if (isinstance(denominador, int)):
+        denominador = f"{denominador}"
+    else:    
+        denominador = f"{denominador[0]}x^{denominador[1]}"
+
+    return (resp_numerador, denominador)
 
 # def cadeia():
 #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
@@ -199,11 +226,14 @@ while True:
             num1 = input("{} - Digite o 1º número: {}".format(estilo_negrito, estilo_normal))
             num2 = input("{} - Digite o 2º número: {}".format(estilo_negrito, estilo_normal))
             divi = quociente(num1, num2)
-
-            print('''
- •{} A resposta é: {}{}
-                   {} '''.format(estilo_sublinhado, divi[0], divi[1], estilo_normal))
             
+            tamanho_espaco = len(divi[0])
+
+            print(f"\n {estilo_sublinhado}• A resposta é: {estilo_normal} "
+                  f"{estilo_sublinhado} {divi[0]:^{tamanho_espaco}} {estilo_normal}"
+                  f"\n {"":^16} {divi[1]:^{tamanho_espaco}}")
+            
+
         # case 5: # CADEIA
         #     print(f"\n{estilo_negrito}", "--" * 27, " {} \n".format(estilo_normal))
 
