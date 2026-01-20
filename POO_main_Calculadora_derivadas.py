@@ -24,13 +24,17 @@ while True:
             equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             equacao_derivada = Derivada(equacao)
-            equacao_derivada.potencia()
+            Derivada.potencia(equacao_derivada.monomios)
             print(equacao_derivada)
 
-        case 3: # MULTIPLICAÇÃO
-            pass
+        case 2: # MULTIPLICAÇÃO
+            equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
-        case 4: # QUOCIENTE
+            equacao_derivada = Derivada(equacao)
+            equacao_derivada.multiplicacao()
+            # print(equacao_derivada)
+
+        case 3: # QUOCIENTE
             pass
 
         case _: # ENTRADA INVÁLIDA
@@ -38,7 +42,7 @@ while True:
             print("\n{}***Número inválido. Tente novamente {} \n".format(Estilo.invertido, Estilo.normal))
             continue
 
-# Área de verificação de continuidade =================================================================    
+# Área de verificação de continuidade =======================================================================================================   
     
     # Verifica se o usuário quer continuar
     continuar = input("\n{} -> Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()[0]

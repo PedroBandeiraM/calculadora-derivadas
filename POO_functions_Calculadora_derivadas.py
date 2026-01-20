@@ -89,16 +89,58 @@ class Derivada:
 
             return (coeficiente, expoente)
     
-    def potencia(self):
-        for i in range(len(self.monomios)):
-            coeficiente, expoente = self.monomios[i] 
+    @staticmethod
+    def potencia(lista_monomios):
+        for item in range(len(lista_monomios)):
+            coeficiente, expoente = lista_monomios[item] 
             coeficiente *= expoente
             if (coeficiente != 0):
                 expoente -= 1
             else:
                 expoente = 0
-            self.monomios[i] = (coeficiente, expoente)
-        return self.monomios
+            lista_monomios[item] = (coeficiente, expoente)
+        return lista_monomios
+
+    # REGISTRO - FUNÇÃO ANTIGA
+    # def potencia(self):
+    #     for i in range(len(self.monomios)):
+    #         coeficiente, expoente = self.monomios[i] 
+    #         coeficiente *= expoente
+    #         if (coeficiente != 0):
+    #             expoente -= 1
+    #         else:
+    #             expoente = 0
+    #         self.monomios[i] = (coeficiente, expoente)
+    #     return self.monomios
+
+    def multiplicacao(self):
+        print("-" * 27) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+        monomios_originais = self.monomios.copy()
+        monomios_derivados = Derivada.potencia(self.monomios.copy())
+
+        lista_monomios = [
+            Derivada._multiplica_monomios(monomios_derivados[0], monomios_originais[1]),
+            Derivada._multiplica_monomios(monomios_derivados[1], monomios_originais[0])
+        ]
+
+        # coeficiente = monomios_derivados[0] * monomios_originais[1]
+        # expoente = monomios_derivados[0] + monomios_originais[1]
+        # lista_monomios.append((coeficiente, expoente))
+        
+        # coeficiente = monomios_originais[0] * monomios_derivados[1]
+        # expoente = monomios_originais[0] + monomios_derivados[1]
+        # lista_monomios.append((coeficiente, expoente))
+
+        print(lista_monomios)
+
+    @staticmethod # TESTAR MAISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    def _multiplica_monomios(termo_1, termo_2):
+        (coeficiente_1, expoente_1), (coeficiente_2, expoente_2) = termo_1, termo_2
+        return (coeficiente_1 * coeficiente_2, expoente_1 + expoente_2)
+
+    def quociente(self):
+        pass
 
     def __str__(self):
         resposta = []
