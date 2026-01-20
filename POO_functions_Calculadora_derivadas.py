@@ -43,7 +43,7 @@ class Derivada:
                 expoente = equacao_sep[1]
                 return (multiplicando, expoente)
             else:
-                return 0
+                return (0, 0)
         except:
             posicao_x = equacao.index("x") # TORNAR MAIS FLEXÍVEL -> QUALQUER LETRA
             try:
@@ -57,9 +57,11 @@ class Derivada:
 
             return (multiplicando, expoente)
     
-    def potencia():
-        pass
+    def potencia(self, monomio):
+        
 
+    def soma_subtracao(self, monomios):
+        pass
 
 # 1 - Menu de opções e continuidade;
 # 2 - Método separador: Recebe uma equacao e divide ela em monomios
