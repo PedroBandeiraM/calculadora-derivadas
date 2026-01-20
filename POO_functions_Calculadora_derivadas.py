@@ -1,4 +1,9 @@
 class Estilo:
+    '''
+    Agrupa a formatação dos textos
+    
+    Cada atributo da classe é um estilo diferente no estilo de "escape codes" (ANSI design), com um método que escreve uma linha divisória na tela.
+    '''
     normal = "\033[m"
     negrito = "\033[1m"
     sublinhado = "\033[4m"
@@ -10,56 +15,111 @@ class Estilo:
         print(f"{cls.negrito}", "--" * 30, f"{cls.normal}")
 
 class Derivada:
-    def __init__(self, equacao_extensa):
-        self.monomios = []
-        self.equacao_extensa = equacao_extensa
-        for i in range(len(self.equacao_extensa)):
-            self.equacao = self.equacao_extensa[i]
-            self.monomios.append(self.separador(self.equacao)
-)
-        del self.equacao
-        print(self.monomios)
+    '''
+    Representa a derivação de funções matemáticas.
 
-    @property
+    A classe recebe uma equação em formato de string, separando os termos entre si e dividindo-os monômios (termos separados) em uma tupla com coeficiente e expoente, sendo utilizados para os cálculos correspondetes, sendo a potêncição, soma e subtração, multiplicação e quociente.
+
+    Atributos:
+        _equacao_extensa (list[str]): Lista de termos separados entre si no formato de string correspondente a entrada do usuário, onde cada termo é um monômio a ser dividido em algo legível pelo programa (string -> int).
+
+        monomios (list[tuple[int, int]]): Lista de monômios (composto por sinal, coeficiente, incógnita e expoente) no formato (coeficiente, expoente).
+    
+    Métodos:
+
+    '''
+    def __init__(self, equacao_extensa):
+        self.equacao_extensa = equacao_extensa
+        self.monomios = []
+        for i in range(len(self.equacao_extensa)):
+            equacao = self.equacao_extensa[i]
+            self.monomios.append(self.separador(equacao)
+)
+        print(self.monomios) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+    @property # Getter
     def equacao_extensa(self):
         return self._equacao_extensa
 
-    @equacao_extensa.setter
+    @equacao_extensa.setter # Setter
     def equacao_extensa(self, equacao):
         self._equacao_extensa = str(equacao).split()
         equacao_limpa = []
+        print(self._equacao_extensa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
-        for termo in self._equacao_extensa:
-            if (termo not in ("+", "-", "*", "/")):
-                equacao_limpa.append(termo)
+        sinal = "+" # Define o sinal positivo caso o primeiro termo não possua sinalização
+        # Verifica o sinal, corrige ele no termo correspondente e adiciona à lista equacao_limpa
+        for termo in self._equacao_extensa: 
+            if (termo == "+"):
+                sinal = "+"
+            elif (termo == "-"):
+                sinal = "-"
+            else:
+                # Adiciona o coeficiente 1 em caso de não haver coeficiente (oculto)
+                if (termo[0] == "x"):
+                    termo = f"1{termo}"
+                # Adiciona o sinal correto a partir das condições anteriores
+                if (sinal == "+"):
+                    equacao_limpa.append(f"+{termo}")
+                else:
+                    equacao_limpa.append(f"-{termo}")
 
-        self._equacao_extensa = equacao_limpa
+        print(equacao_limpa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        self._equacao_extensa = equacao_limpa # Atualiza o atributo com os termos (monômios) separados 
 
     def separador(self, equacao):
         try:
-            if ("x" in equacao): # TORNAR MAIS FLEXÍVEL -> QUALQUER LETRA
-                equacao_sep = list(map(int, equacao.split("x^"))) # TORNAR MAIS FLEXÍVEL -> QUALQUER LETRA
-                multiplicando = equacao_sep[0]
+            if ("x" in equacao): 
+                equacao_sep = list(map(int, equacao.split("x^"))) 
+                coeficiente = equacao_sep[0]
                 expoente = equacao_sep[1]
-                return (multiplicando, expoente)
+                return (coeficiente, expoente)
             else:
-                return 0
+                return (0, 0)
         except:
-            posicao_x = equacao.index("x") # TORNAR MAIS FLEXÍVEL -> QUALQUER LETRA
+            posicao_x = equacao.index("x") 
             try:
-                multiplicando = int(equacao[:posicao_x])
+                coeficiente = int(equacao[:posicao_x])
             except:
-                multiplicando = 1
+                coeficiente = 1
             try:
-                expoente = int(equacao[(posicao_x + 2):])
+                expoente = int(equacao[(posicao_x + 2):]) # Considera x^
             except:
                 expoente = 1
 
-            return (multiplicando, expoente)
+            return (coeficiente, expoente)
     
-    def potencia():
-        pass
+    def potencia(self):
+        for i in range(len(self.monomios)):
+            coeficiente, expoente = self.monomios[i] 
+            coeficiente *= expoente
+            if (coeficiente != 0):
+                expoente -= 1
+            else:
+                expoente = 0
+            self.monomios[i] = (coeficiente, expoente)
+        return self.monomios
 
+    def __str__(self):
+        resposta = []
+        for (coeficiente, expoente) in self.monomios:
+            if (coeficiente < 0):
+                sinal = "-"
+            else:
+                sinal = "+"
+
+            coeficiente = abs(coeficiente)
+
+            if (expoente == 0):
+                termo = f"{coeficiente}"
+            elif (expoente == 1):
+                termo = f"{coeficiente}x"
+            else:
+                termo = f"{coeficiente}x^{expoente}"
+
+            resposta.append(f"{sinal} {termo}")
+
+        return " ".join(resposta)
 
 # 1 - Menu de opções e continuidade;
 # 2 - Método separador: Recebe uma equacao e divide ela em monomios
