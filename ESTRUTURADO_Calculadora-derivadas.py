@@ -12,8 +12,8 @@ estilo_sublinhado_invertido = "\033[1;4;7m"
 
 # Área de funções =========================================================================================
 
-def escreva_linha(cls):
-        print(f"{cls.negrito}", "--" * 30, f"{cls.normal}")
+def escreva_linha():
+        print(f"{estilo_negrito}", "--" * 30, f"{estilo_normal}")
 
 def potencia(num):    
     num = str(num) #Variável que armazena o monômio a ser derivado
