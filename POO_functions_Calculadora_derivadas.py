@@ -1,3 +1,5 @@
+import re
+
 class Estilo:
     '''
     Agrupa a formatação dos textos
@@ -30,12 +32,12 @@ class Derivada:
     '''
     def __init__(self, equacao_extensa):
         self.equacao_extensa = equacao_extensa
-        self.monomios = []
+        self.monomios_originais = []
         for i in range(len(self.equacao_extensa)):
             equacao = self.equacao_extensa[i]
-            self.monomios.append(self.separador(equacao)
+            self.monomios_originais.append(self.separador(equacao)
 )
-        print(self.monomios) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        print("3. Monômios divididos: ", self.monomios_originais) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
     @property # Getter
     def equacao_extensa(self):
@@ -45,7 +47,7 @@ class Derivada:
     def equacao_extensa(self, equacao):
         self._equacao_extensa = str(equacao).split()
         equacao_limpa = []
-        print(self._equacao_extensa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        print("1. Equação separada: ", self._equacao_extensa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
         sinal = "+" # Define o sinal positivo caso o primeiro termo não possua sinalização
         # Verifica o sinal, corrige ele no termo correspondente e adiciona à lista equacao_limpa
@@ -54,6 +56,8 @@ class Derivada:
                 sinal = "+"
             elif (termo == "-"):
                 sinal = "-"
+            elif not re.fullmatch(r"-?\d+|-?\d*x(\^\d+)?", termo): # Ignora qualquer termo que não seja calculável
+                continue
             else:
                 # Adiciona o coeficiente 1 em caso de não haver coeficiente (oculto)
                 if (termo[0] == "x"):
@@ -64,7 +68,7 @@ class Derivada:
                 else:
                     equacao_limpa.append(f"-{termo}")
 
-        print(equacao_limpa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        print("2. Equação sem operadores: ", equacao_limpa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         self._equacao_extensa = equacao_limpa # Atualiza o atributo com os termos (monômios) separados 
 
     def separador(self, equacao):
@@ -89,17 +93,18 @@ class Derivada:
 
             return (coeficiente, expoente)
     
-    @staticmethod
-    def potencia(lista_monomios):
-        for item in range(len(lista_monomios)):
-            coeficiente, expoente = lista_monomios[item] 
+    def potencia(self):
+        monomios = self.monomios_originais.copy() # Utiliza uma cópia dos monômios originais (sem derivação) para evitar a alteração destes
+        for item in range(len(monomios)):
+            coeficiente, expoente = monomios[item] 
             coeficiente *= expoente
             if (coeficiente != 0):
                 expoente -= 1
             else:
                 expoente = 0
-            lista_monomios[item] = (coeficiente, expoente)
-        return lista_monomios
+            monomios[item] = (coeficiente, expoente)
+        self.monomios_derivados = monomios # Cria um atributo relacionado aos monômios derivados (pela regra da potência)
+        return self
 
     # REGISTRO - FUNÇÃO ANTIGA
     # def potencia(self):
@@ -116,25 +121,23 @@ class Derivada:
     def multiplicacao(self):
         print("-" * 27) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
-        monomios_originais = self.monomios.copy()
-        monomios_derivados = Derivada.potencia(self.monomios.copy())
+        # VERIFICAÇÃO DE MULTIPLICAÇÃO - SE HOUVER "*"
+        # CRIAR ATRIBUTO SELF.OPERADORES PARA ISTO
+
+        originais = self.monomios_originais
+        derivados = self.potencia().monomios_derivados
 
         lista_monomios = [
-            Derivada._multiplica_monomios(monomios_derivados[0], monomios_originais[1]),
-            Derivada._multiplica_monomios(monomios_derivados[1], monomios_originais[0])
+            Derivada._multiplica_monomios(derivados[0], originais[1]),
+            Derivada._multiplica_monomios(originais[0], derivados[1])
         ]
 
-        # coeficiente = monomios_derivados[0] * monomios_originais[1]
-        # expoente = monomios_derivados[0] + monomios_originais[1]
-        # lista_monomios.append((coeficiente, expoente))
-        
-        # coeficiente = monomios_originais[0] * monomios_derivados[1]
-        # expoente = monomios_originais[0] + monomios_derivados[1]
-        # lista_monomios.append((coeficiente, expoente))
+        # CRIAR MÉTODO ESTÁTICO DE SOMA: _SOMA_MONOMIOS
+        # UTILIZAR ESTE MÉTODO AQUI E RETORNAR O RESULTADO
 
-        print(lista_monomios)
+        return lista_monomios
 
-    @staticmethod # TESTAR MAISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    @staticmethod 
     def _multiplica_monomios(termo_1, termo_2):
         (coeficiente_1, expoente_1), (coeficiente_2, expoente_2) = termo_1, termo_2
         return (coeficiente_1 * coeficiente_2, expoente_1 + expoente_2)
@@ -144,7 +147,7 @@ class Derivada:
 
     def __str__(self):
         resposta = []
-        for (coeficiente, expoente) in self.monomios:
+        for (coeficiente, expoente) in self.monomios_derivados:
             if (coeficiente < 0):
                 sinal = "-"
             else:

@@ -24,16 +24,16 @@ while True:
             equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             equacao_derivada = Derivada(equacao)
-            Derivada.potencia(equacao_derivada.monomios)
-            print(equacao_derivada)
+            resolucao = equacao_derivada.potencia()
+            print("4. Resposta final: ", resolucao)
 
         case 2: # MULTIPLICAÇÃO
             equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             equacao_derivada = Derivada(equacao)
-            equacao_derivada.multiplicacao()
-            # print(equacao_derivada)
-
+            resoulucao = equacao_derivada.multiplicacao()
+            print("4. Resposta final: ", resolucao)
+            
         case 3: # QUOCIENTE
             pass
 
