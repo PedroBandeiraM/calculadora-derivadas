@@ -23,29 +23,42 @@ while True:
         case 1: # POTENCIAÇÃO, SOMA E SUBTRAÇÃO
             equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
-            equacao_derivada = Derivada(equacao)
-            resolucao = equacao_derivada.potencia()
-            print("4. Resposta final: ", resolucao)
+            try:
+                equacao_derivada = Derivada(equacao)
+                resolucao = equacao_derivada.potencia("pot_soma_sub")
+                print("5. Resposta final: ", resolucao)
+            except ValueError as erro:
+                print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
 
         case 2: # MULTIPLICAÇÃO
             equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
-            equacao_derivada = Derivada(equacao)
-            resoulucao = equacao_derivada.multiplicacao()
-            print("4. Resposta final: ", resolucao)
-            
+            try:
+                equacao_derivada = Derivada(equacao)
+                resolucao = equacao_derivada.multiplicacao()
+                print("5. Resposta final: ", resolucao)
+            except ValueError as erro:
+                print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
+
         case 3: # QUOCIENTE
-            pass
+            equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
+
+            try:
+                equacao_derivada = Derivada(equacao)
+                resolucao = equacao_derivada.quociente()
+                print("5. Resposta final: ", resolucao)
+            except ValueError as erro:
+                print(f"{Estilo.invertido}{erro}{Estilo.normal}")
 
         case _: # ENTRADA INVÁLIDA
             os.system('cls')
             print("\n{}***Número inválido. Tente novamente {} \n".format(Estilo.invertido, Estilo.normal))
             continue
 
-# Área de verificação de continuidade =======================================================================================================   
+# Área de verificação de continuidade ==========================================================================================================
     
     # Verifica se o usuário quer continuar
-    continuar = input("\n{} -> Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()[0]
+    continuar = input("\n{} -> Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()
 
     if (continuar == "S"):
         os.system('cls')
