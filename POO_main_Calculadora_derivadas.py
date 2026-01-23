@@ -14,7 +14,8 @@ while True:
     {}[2]{} Multiplicação (*)
     {}[3]{} Quociente (/)
     {}[4]{} Cadeia (composição)
-    {}-> {}'''.format(Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal)))
+    {}[5]{} Sair
+    {}-> {}'''.format(Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal)))
     except:
         operacao = 0 # Caso seja digitado algo que não seja possível converter para número
 
@@ -25,7 +26,7 @@ while True:
 
             try:
                 equacao_derivada = Derivada(equacao)
-                resolucao = equacao_derivada.potencia("pot_soma_sub")
+                resolucao = equacao_derivada.potencia()
                 print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
@@ -35,7 +36,7 @@ while True:
 
             try:
                 equacao_derivada = Derivada(equacao)
-                resolucao = equacao_derivada.multiplicacao()
+                resolucao = equacao_derivada.multiplicacao("mult")
                 print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
@@ -45,17 +46,28 @@ while True:
 
             try:
                 equacao_derivada = Derivada(equacao)
-                resolucao = equacao_derivada.quociente()
+                resolucao = equacao_derivada.quociente("divi")
                 print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"{Estilo.invertido}{erro}{Estilo.normal}")
+
+        case 4: # CADEIA
+            pass
+
+        case 5: # SAIR
+            print(f"\n{Estilo.invertido}***Finalizando sistema", end="", flush=True)
+            for i in range(3):
+                print(".", end="", flush=True)
+                time.sleep(1)
+            print(Estilo.normal)
+            break
 
         case _: # ENTRADA INVÁLIDA
             os.system('cls')
             print("\n{}***Número inválido. Tente novamente {} \n".format(Estilo.invertido, Estilo.normal))
             continue
 
-# Área de verificação de continuidade ==========================================================================================================
+# Área de verificação de continuidade ================================================================================================================================================
     
     # Verifica se o usuário quer continuar
     continuar = input("\n{} -> Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()
@@ -64,7 +76,7 @@ while True:
         os.system('cls')
         continue
     elif (continuar == "N"):
-        print("{}\n***Finalizando sistema".format(Estilo.invertido), end="", flush=True)
+        print(f"\n{Estilo.invertido}***Finalizando sistema", end="", flush=True)
         for i in range(3):
             print(".", end="", flush=True)
             time.sleep(1)
