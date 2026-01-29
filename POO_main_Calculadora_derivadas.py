@@ -17,39 +17,44 @@ while True:
     {}[5]{} Sair
     {}-> {}'''.format(Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal)))
     except:
-        operacao = 0 # Caso seja digitado algo que não seja possível converter para número
+        operacao = 0 # Caso seja digitado algo inválido (impossível determinar)
 
     # Verifica se a opção escolhida é válida, direcionando ou retornando erro
     match (operacao):
         case 1: # POTENCIAÇÃO, SOMA E SUBTRAÇÃO
-            equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
+            equacao = input("\n{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             try:
                 equacao_derivada = Derivada(equacao)
                 resolucao = equacao_derivada.potencia()
-                print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
+            else:
+                print(f'''    {Estilo.negrito}->{Estilo.normal} {Estilo.sublinhado}Resposta{Estilo.normal}: {resolucao} ''')
 
         case 2: # MULTIPLICAÇÃO
-            equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
+            equacao = input("\n{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             try:
                 equacao_derivada = Derivada(equacao)
                 resolucao = equacao_derivada.multiplicacao("mult")
-                print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
+            else:
+                print(f'''    {Estilo.negrito}->{Estilo.normal} {Estilo.sublinhado}Resposta{Estilo.normal}: {resolucao} ''')
 
         case 3: # QUOCIENTE
-            equacao = input("{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
+            equacao = input("\n{} - Digite a função a ser derivada: {}".format(Estilo.negrito, Estilo.normal)).strip().lower()
 
             try:
                 equacao_derivada = Derivada(equacao)
                 resolucao = equacao_derivada.quociente("divi")
-                print("5. Resposta final: ", resolucao)
             except ValueError as erro:
                 print(f"{Estilo.invertido}{erro}{Estilo.normal}")
+            except ZeroDivisionError:
+                print(f"\n{Estilo.invertido} ***Divisão por zero apresentada. Resultado impossível. {Estilo.normal}")
+            else:
+                print(f'''    {Estilo.negrito}->{Estilo.normal} {Estilo.sublinhado}Resposta{Estilo.normal}: {resolucao} ''')
 
         case 4: # CADEIA
             pass
@@ -66,11 +71,9 @@ while True:
             os.system('cls')
             print("\n{}***Número inválido. Tente novamente {} \n".format(Estilo.invertido, Estilo.normal))
             continue
-
-# Área de verificação de continuidade ================================================================================================================================================
     
     # Verifica se o usuário quer continuar
-    continuar = input("\n{} -> Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()
+    continuar = input("\n{} - Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()
 
     if (continuar == "S"):
         os.system('cls')

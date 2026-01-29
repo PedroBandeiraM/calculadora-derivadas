@@ -24,11 +24,38 @@ class Derivada:
     A classe recebe uma equação em formato de string, separando os termos entre si e dividindo-os monômios (termos separados) em uma tupla com coeficiente e expoente, sendo utilizados para os cálculos correspondetes, sendo a potêncição, soma e subtração, multiplicação e quociente.
 
     Atributos:
-        _equacao_extensa (list[str]): Lista de termos separados entre si no formato de string correspondente a entrada do usuário, onde cada termo é um monômio a ser dividido em algo legível pelo programa (string -> int).
-
-        monomios (list[tuple[int, int]]): Lista de monômios (composto por sinal, coeficiente, incógnita e expoente) no formato (coeficiente, expoente).
+        monomios_originais (list[tuple[int | float, int | float]]): 
+            Lista de monômios em formato de tupla, onde o primeiro item é o coefiente original e o segundo é o expoente original do mônomio em questão.
     
+        monomios_derivados (list[tuple[int | float, int | float]]): 
+            Lista de monômios em formato de tupla, onde o primeiro item é o coefiente derivado e o segundo é o expoente derivado do mônomio em questão.
+
+        operadoes (list[str]): 
+            Lista que armazena os operadores (+, -, * e /) para verificar as operações.
+
+        equacao_extensa (list[str]): 
+            Lista de monômios sem coeficiente e expoente separados, onde estes termos em formato de string e com operadores unários alocados corretamente de acordo com o input do usuário.
+
     Métodos:
+        separador_elementos():
+            Recebe a equação_extensa e separa cada termo em um monômio real, retornando uma tupla com o formato (coeficiente e expoente)
+
+        potencia():
+            Recebe um monômio já separado por <separador_elementos> e deriva, onde o coeficiente é multiplicado pelo expoente e o expoente é subtraído por 1, adicionando uma tupla no mesmo formato com os novos valores em <monomios_derivados> e retornando self.
+
+        multiplicao():
+
+
+        quociente():
+
+
+        _multiplica_monomios():
+
+
+        _soma_sub_monomios():
+
+        
+        _arredondar():
 
     '''
     def __init__(self, equacao_extensa: str):
@@ -39,18 +66,16 @@ class Derivada:
         for item in range(len(self.equacao_extensa)):
             monomio = self.equacao_extensa[item]
             self.monomios_originais.append(self.separador_elementos(monomio))
-        print("3. Monômios divididos: ", self.monomios_originais) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
-    @property # Getter
+    @property
     def equacao_extensa(self):
         return self._equacao_extensa
 
-    @equacao_extensa.setter # Setter
+    @equacao_extensa.setter
     def equacao_extensa(self, equacao: str):
         equacao_limpa: list[str] = []
         sinal: str = "+" # Define o sinal positivo (padrão inicial)
         self._equacao_extensa = equacao.split()
-        print("1. Equação separada: ", self._equacao_extensa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
         # Adiciona os operadores "/" e "*" em <self.operadores> e corrige o sinal em <equacao_extensa>
         for termo in self._equacao_extensa: 
@@ -62,8 +87,9 @@ class Derivada:
                 self.operadores.append(termo)
             elif (termo in ("*", "/")):
                 self.operadores.append(termo)
-            elif not re.fullmatch(r"-?\d+(?:\.\d+)?|-?\d*(?:\.\d+)?x(\^-?\d+)?", termo): # Retorna erro ao encontrar caracteres desconhecidos
-                raise ValueError("***Algum valor incorreto foi encontrado. Verifique a equação e tente novamente.")
+                sinal = "+"
+            elif not re.fullmatch(r"-?\d+(?:\.\d+)?|-?\d*(?:\.\d+)?x(\^-?\d+)?", termo): # Retorna erro ao encontrar caracteres inválidos
+                raise ValueError("*** Algum valor inválido foi encontrado. Verifique a equação e tente novamente.")
             else:
                 # Adiciona o coeficiente 1 caso não haja coeficiente (oculto)
                 if (termo[0] == "x"):
@@ -74,37 +100,36 @@ class Derivada:
                 else:
                     equacao_limpa.append(f"-{termo}")
 
-        print("2. Equação sem operadores: ", equacao_limpa) # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        self._equacao_extensa = equacao_limpa # Atualiza o atributo com os termos separados e sem operadores 
+        self._equacao_extensa = equacao_limpa 
 
     def separador_elementos(self, equacao: str) -> tuple:
         try:
+            # Converte coeficiente e expoente em inteiros
             if ("x" in equacao): 
                 equacao_sep = list(map(int, equacao.split("x^"))) 
                 coeficiente = equacao_sep[0]
                 expoente = equacao_sep[1]
                 return (coeficiente, expoente)
             else:
-                return (0, 0)
+                return (0, 0) # Se não há variável (x), é uma constante, resultando em 0
         except:
+            # Converte coeficiente ou expoente em inteiro
             posicao_x = equacao.index("x") 
             try:
                 coeficiente = float(equacao[:posicao_x])
-                Derivada._arredondar(coeficiente)
+                coeficiente = Derivada._arredondar(coeficiente)
             except:
                 coeficiente = 1
             try:
                 expoente = float(equacao[(posicao_x + 2):]) # Considera x^
-                Derivada._arredondar(expoente)
+                expoente = Derivada._arredondar(expoente)
             except:
                 expoente = 1
 
             return (coeficiente, expoente)
     
     def potencia(self) -> Self:
-        print("4. Operadores especiais encontrados: ", self.operadores) # AAAAAAAAAAAAAAAAAAAAAAAAAA
-
-        monomios = self.monomios_originais.copy() # Utiliza uma cópia para não modificar os originais
+        monomios = self.monomios_originais.copy()
         for item in range(len(monomios)):
             coeficiente, expoente = monomios[item] 
             coeficiente *= expoente
@@ -113,21 +138,18 @@ class Derivada:
             else:
                 expoente = 0
             resultado = (coeficiente, expoente)
-            self.monomios_derivados.append(resultado) # Atribui monômios derivados pela regra da potência
+            self.monomios_derivados.append(resultado)
         return self
 
     def multiplicacao(self, operacao) -> Self:
         # Verifica se a operação solicitada corresponde ao operador presente
         if (operacao == "mult") and not any(op in ("*") for op in self.operadores):
-            raise ValueError("***Operador necessário não encontrado. O usuário escolheu operações relacionadas à multiplicações. Tente novamente.")
-        
-        if (len(self.monomios_originais) > 2): # MODIFICAR MULTIPLICAÇÃO PARA ACEITAR TERMOS COM OUTRAS OPERAÇÕES 
-            pass
+            raise ValueError(" ***Operador necessário não encontrado. O usuário escolheu operações relacionadas à multiplicações. Tente novamente.")
         
         originais = self.monomios_originais
         derivados = self.potencia().monomios_derivados
 
-        # Representa: f'g + fg'
+        # Representa: f'g e fg'
         lista_monomios = [
             Derivada._multiplica_monomios(derivados[0], originais[1]),
             Derivada._multiplica_monomios(originais[0], derivados[1])
@@ -140,35 +162,28 @@ class Derivada:
     def quociente(self, operacao) -> Self:
         # Verifica se a operação solicitada corresponde ao operador presente
         if (operacao == "divi") and not any(op in ("/") for op in self.operadores):
-            raise ValueError("***Operador necessário não encontrado. O usuário escolheu operações relacionadas à divisão. Tente novamente.")
-        
-        if (len(self.monomios_originais) > 2): # MODIFICAR MULTIPLICAÇÃO PARA ACEITAR TERMOS COM OUTRAS OPERAÇÕES 
-            pass
+            raise ValueError("*** Operador necessário não encontrado. O usuário escolheu operações relacionadas à divisão. Tente novamente.")
         
         originais = self.monomios_originais
         derivados = self.potencia().monomios_derivados
 
-        # Representa f'g - fg'
+        # Representa f'g e fg'
         lista_monomios = [
             Derivada._multiplica_monomios(derivados[0], originais[1]),
             Derivada._multiplica_monomios(originais[0], derivados[1])
         ]
 
-        numerador = Derivada._soma_sub_monomios("-", lista_monomios[0], lista_monomios[1])[0] # Pega o 1º item, a tupla somada -> ERRO sem soma
+        numerador = Derivada._soma_sub_monomios("-", lista_monomios[0], lista_monomios[1])[0]
         denominador = self.monomios_originais[1]
 
         (coeficiente_numerador, expoente_numerador) = numerador
         (coeficiente_denominador, expoente_denominador) = denominador
+
         coeficiente_denominador **= 2
         expoente_denominador *= 2
 
-        print("- Termos: A: ", coeficiente_numerador, expoente_numerador,"B: ", coeficiente_denominador, expoente_denominador)
-
-        coeficiente_final = coeficiente_numerador / coeficiente_denominador
-        coeficiente_final = Derivada._arredondar(coeficiente_final)
+        coeficiente_final = Derivada._arredondar(coeficiente_numerador / coeficiente_denominador)
         expoente_final = expoente_numerador - expoente_denominador
-
-        print("- Termos finais: ", coeficiente_final, expoente_final)
 
         self.monomios_derivados = [(coeficiente_final, expoente_final)]
 
@@ -198,11 +213,10 @@ class Derivada:
         else:
             return round(num, 1)
 
-    # MODIFICAR: RETIRAR O 1 DO X, QUANDO O COEFICIENTE É OCULTO
     def __str__(self) -> str:
         resposta = []
         for (coeficiente, expoente) in self.monomios_derivados:
-            if (coeficiente > 0):
+            if (coeficiente >= 0):
                 sinal = "+"
             else:
                 sinal = "-"
@@ -223,7 +237,3 @@ class Derivada:
             resposta.append(f"{sinal} {termo}")
 
         return " ".join(resposta)
-
-# 1 - Menu de opções e continuidade;
-# 2 - Método separador: Recebe uma equacao e divide ela em monomios
-# 3 - Métodos para cada opereção: Potência, Soma/Sub, Multiplicação e Quociente.
