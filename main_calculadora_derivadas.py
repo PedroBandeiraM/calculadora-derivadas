@@ -68,7 +68,7 @@ while True:
     
     # Verifica se o usuário quer continuar
     try:
-        continuar = input("\n{} - Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()[0]
+        continuar = input("\n{} - Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).strip().upper()[0]
     except:
         continuar = 0
 
