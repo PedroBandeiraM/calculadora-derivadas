@@ -67,7 +67,10 @@ while True:
             continue
     
     # Verifica se o usuário quer continuar
-    continuar = input("\n{} - Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()
+    try:
+        continuar = input("\n{} - Deseja continuar [S/N]? {}". format(Estilo.negrito, Estilo.normal)).upper()[0]
+    except:
+        continuar = 0
 
     if (continuar == "S"):
         os.system('cls')
