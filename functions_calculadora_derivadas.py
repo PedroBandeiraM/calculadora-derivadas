@@ -5,17 +5,12 @@ class Estilo:
     '''
     Agrupa a formatação dos textos
     
-    Cada atributo da classe é um estilo diferente no estilo de "escape codes" (ANSI design), com um método que escreve uma linha divisória na tela.
+    Cada atributo de classe é um estilo diferente no estilo de "escape codes" (ANSI design).
     '''
     normal = "\033[m"
     negrito = "\033[1m"
     sublinhado = "\033[4m"
     invertido = "\033[7m"
-    sublinhado_invertido = "\033[1;4;7m"
-
-    @classmethod
-    def escreva_linha(cls):
-        print(f"{cls.negrito}", "--" * 30, f"{cls.normal}")
 
 class Derivada:
     '''
@@ -44,19 +39,19 @@ class Derivada:
             Recebe um monômio já separado por <separador_elementos> e deriva, onde o coeficiente é multiplicado pelo expoente e o expoente é subtraído por 1, adicionando uma tupla no mesmo formato com os novos valores em <monomios_derivados> e retornando self.
 
         multiplicao():
-
+            Deriva e aplica as operações aos termos respectivamente (f'g + fg'), armazena a multiplicação entre as funções (f e g) em <lista_monomios> e atualiza <monomios_derivados> pela subtração dos termos multiplicados, retornando self.
 
         quociente():
-
+            Deriva e aplica as operações aos termos respectivamente ((f'g - fg')/g^2), armazena a multiplicação entre as funções (f e g) em <lista_monomios>, cria <numerador> com a subtração dos termos multiplicados, cria <denominador> com (g^2) e atualiza <monomios_derivados> com a divisão entre numerador e denominador, retornando self.
 
         _multiplica_monomios():
-
+            Recebe dois monômios e retorna uma tupla com produto entre os termos.
 
         _soma_sub_monomios():
-
+            Recebe dois monômios e retorna uma lista com a soma/subtração entre os termos (se for possível).
         
         _arredondar():
-
+            Recebe um número e converte para inteiro se sua parte decimal for 0, retornando o valor.
     '''
     def __init__(self, equacao_extensa: str):
         self.monomios_originais: list[tuple] = []
@@ -81,14 +76,12 @@ class Derivada:
         for termo in self._equacao_extensa: 
             if (termo == "+"):
                 sinal = "+"
-                self.operadores.append(termo)
             elif (termo == "-"):
                 sinal = "-"
-                self.operadores.append(termo)
             elif (termo in ("*", "/")):
                 self.operadores.append(termo)
                 sinal = "+"
-            elif not re.fullmatch(r"-?\d+(?:\.\d+)?|-?\d*(?:\.\d+)?x(\^-?\d+)?", termo): # Retorna erro ao encontrar caracteres inválidos
+            elif not re.fullmatch(r"-?\d+(?:\.\d+)?|-?\d*(?:\.\d+)?x(?:\^-?\d+)?", termo): # Retorna erro ao encontrar caracteres inválidos
                 raise ValueError("*** Algum valor inválido foi encontrado. Verifique a equação e tente novamente.")
             else:
                 # Adiciona o coeficiente 1 caso não haja coeficiente (oculto)
@@ -143,9 +136,9 @@ class Derivada:
 
     def multiplicacao(self, operacao) -> Self:
         # Verifica se a operação solicitada corresponde ao operador presente
-        if (operacao == "mult") and not any(op in ("*") for op in self.operadores):
-            raise ValueError(" ***Operador necessário não encontrado. O usuário escolheu operações relacionadas à multiplicações. Tente novamente.")
-        
+        if (operacao == "mult") and ("*" not in self.operadores):
+            raise ValueError("***Operador necessário não encontrado. O usuário escolheu operações relacionadas à multiplicações. Tente novamente.")
+    
         originais = self.monomios_originais
         derivados = self.potencia().monomios_derivados
 
@@ -161,7 +154,7 @@ class Derivada:
 
     def quociente(self, operacao) -> Self:
         # Verifica se a operação solicitada corresponde ao operador presente
-        if (operacao == "divi") and not any(op in ("/") for op in self.operadores):
+        if (operacao == "divi") and ("/" not in self.operadores):
             raise ValueError("*** Operador necessário não encontrado. O usuário escolheu operações relacionadas à divisão. Tente novamente.")
         
         originais = self.monomios_originais
@@ -197,14 +190,16 @@ class Derivada:
     @staticmethod
     def _soma_sub_monomios(operacao: str, monomio_1: tuple, monomio_2: tuple) -> list[tuple]:
         (coeficiente_1, expoente_1), (coeficiente_2, expoente_2) = monomio_1, monomio_2
+        # Verifica se é possível somar/subtrair (expoentes devem ser iguais)
         if (expoente_1 == expoente_2):
             if (operacao == "+"):
                 coeficiente_final = coeficiente_1 + coeficiente_2
             else:
                 coeficiente_final = coeficiente_1 - coeficiente_2
             return [(coeficiente_final, expoente_1)] # Retorna a soma
+        # Se não for possível, então a equação apresentou uma quantidade não permitida de monômios
         else:
-            return [monomio_1, monomio_2] # Retorna os monômios que não puderam ser somados
+            raise ValueError("***Este programa não aceita mais de 2 monômios em operações de multilplicação e quociente. Tente outra equação.")
 
     @staticmethod
     def _arredondar(num: float) -> int | float:

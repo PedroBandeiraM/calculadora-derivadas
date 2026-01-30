@@ -1,21 +1,18 @@
 import os, time
-from POO_functions_Calculadora_derivadas import Estilo, Derivada
-
-resp = []
+from functions_calculadora_derivadas import Estilo, Derivada
 
 while True:
     print(f"\n{Estilo.negrito}{" CALCULADORA DE DERIVADAS ":=^60}{Estilo.normal}") # Título
 
-    # Opções de operações (1 à 5) para escolher
+    # Opções de operações (1 à 4) para escolher
     try:
         operacao = int(input('''
 {} - Escolha a operação que deseja calcular: {}                     
     {}[1]{} Potenciação, soma e subtração ( ^ | + | - )
     {}[2]{} Multiplicação (*)
     {}[3]{} Quociente (/)
-    {}[4]{} Cadeia (composição)
-    {}[5]{} Sair
-    {}-> {}'''.format(Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal)))
+    {}[4]{} Sair
+    {}-> {}'''.format(Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal, Estilo.negrito, Estilo.normal)))
     except:
         operacao = 0 # Caso seja digitado algo inválido (impossível determinar)
 
@@ -50,16 +47,13 @@ while True:
                 equacao_derivada = Derivada(equacao)
                 resolucao = equacao_derivada.quociente("divi")
             except ValueError as erro:
-                print(f"{Estilo.invertido}{erro}{Estilo.normal}")
+                print(f"\n {Estilo.invertido}{erro}{Estilo.normal}")
             except ZeroDivisionError:
                 print(f"\n{Estilo.invertido} ***Divisão por zero apresentada. Resultado impossível. {Estilo.normal}")
             else:
                 print(f'''    {Estilo.negrito}->{Estilo.normal} {Estilo.sublinhado}Resposta{Estilo.normal}: {resolucao} ''')
 
-        case 4: # CADEIA
-            pass
-
-        case 5: # SAIR
+        case 4: # SAIR
             print(f"\n{Estilo.invertido}***Finalizando sistema", end="", flush=True)
             for i in range(3):
                 print(".", end="", flush=True)
