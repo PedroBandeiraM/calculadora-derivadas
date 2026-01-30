@@ -21,11 +21,13 @@ Programação Orientada a Objetos (POO) e interface em linha de comando (CLI).
 
 1. Clone o repositório:
 ```bash
-``` git clone https://github.com/seu-usuario/calculadora-derivadas.git
-
+git clone https://github.com/seu-usuario/calculadora-derivadas.git
+```
 2. Acesse a pasta do projeto:
-``` cd calculadora-derivadas
-
+```bash
+cd calculadora-derivadas
+```
 3. Execute o programa:
-``` python main.py
+```bash
+python main.py
 
